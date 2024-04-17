@@ -1,0 +1,853 @@
+Nonterminals useless in grammar
+
+    increment_statement
+    increment_operator
+    assignment_operator
+    addition_expression
+    int_literal
+
+
+Terminals unused in grammar
+
+    ADD_ASSIGN
+    SUB_ASSIGN
+    MUL_ASSIGN
+    DIV_ASSIGN
+    T_IF
+    T_WHILE
+    T_ELSE
+    T_FOR
+    DEFAULT
+    CONTINUE
+    CONST
+    CHAR
+    CASE
+    BREAK
+    AUTO
+    DO
+    DOUBLE
+    IF
+    INT
+    LONG
+    '='
+    '+'
+    '-'
+
+
+Rules useless in grammar
+
+   36 increment_statement: name increment_operator ';'
+
+   37 increment_operator: ADD_ASSIGN
+   38                   | SUB_ASSIGN
+   39                   | MUL_ASSIGN
+   40                   | DIV_ASSIGN
+
+   41 assignment_operator: '='
+
+   42 addition_expression: multiplication_expression
+   43                    | addition_expression '+' multiplication_expression
+   44                    | addition_expression '-' multiplication_expression
+
+
+Rules useless in parser due to conflicts
+
+   16 declaration_list: declaration_expression
+
+
+State 13 conflicts: 9 shift/reduce
+State 17 conflicts: 1 shift/reduce, 1 reduce/reduce
+State 28 conflicts: 9 shift/reduce
+State 38 conflicts: 1 shift/reduce
+
+
+Grammar
+
+    0 $accept: ROOT $end
+
+    1 ROOT: program
+
+    2 program: expression
+    3        | program expression
+
+    4 contained_program: '{' program '}'
+
+    5 expression: T_VOID function_definitions
+    6           | assignment_expression ';'
+    7           | declaration ';'
+    8           | expression assignment_expression ';'
+    9           | expression declaration ';'
+   10           | T_RETURN primative ';'
+
+   11 assignment_expression: declaration T_EQUALS primative ';'
+   12                      | name T_EQUALS primative ';'
+   13                      | name T_EQUALS multiplication_expression ';'
+
+   14 declaration: declaration_list ';'
+   15            | declaration_expression
+
+   16 declaration_list: declaration_expression
+   17                 | declaration_list ';' declaration
+
+   18 declaration_expression: data_type name
+   19                       | declaration_expression name
+
+   20 function_definitions: declaration name '(' declaration ')' contained_program
+
+   21 primative: STRING_LITERAL
+   22          | CONSTANT
+   23          | NUMBER
+
+   24 data_type: T_INT
+   25          | T_FLOAT
+   26          | T_DOUBLE
+   27          | T_STRING
+   28          | T_CHAR
+   29          | T_BOOL
+   30          | T_LONG
+   31          | T_VOID
+
+   32 multiplication_expression: primative
+   33                          | multiplication_expression '*' primative
+   34                          | multiplication_expression '/' primative
+   35                          | multiplication_expression '%' primative
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    '%' (37) 35
+    '(' (40) 20
+    ')' (41) 20
+    '*' (42) 33
+    '+' (43)
+    '-' (45)
+    '/' (47) 34
+    ';' (59) 6 7 8 9 10 11 12 13 14 17
+    '=' (61)
+    '{' (123) 4
+    '}' (125) 4
+    error (256)
+    ADD_ASSIGN <string> (258)
+    SUB_ASSIGN <string> (259)
+    MUL_ASSIGN <string> (260)
+    DIV_ASSIGN <string> (261)
+    T_INT <string> (262) 24
+    T_CHAR <string> (263) 28
+    T_STRING <string> (264) 27
+    T_DOUBLE <string> (265) 26
+    T_FLOAT <string> (266) 25
+    T_BOOL <string> (267) 29
+    T_VOID <string> (268) 5 31
+    T_LONG <string> (269) 30
+    T_IF <string> (270)
+    T_WHILE <string> (271)
+    T_ELSE <string> (272)
+    T_FOR <string> (273)
+    name <string> (274) 12 13 18 19 20
+    T_EQUALS <string> (275) 11 12 13
+    STRING_LITERAL <string> (276) 21
+    CONSTANT <string> (277) 22
+    T_RETURN <string> (278) 10
+    NUMBER <number> (279) 23
+    DEFAULT (280)
+    CONTINUE (281)
+    CONST (282)
+    CHAR (283)
+    CASE (284)
+    BREAK (285)
+    AUTO (286)
+    DO (287)
+    DOUBLE (288)
+    IF (289)
+    INT (290)
+    LONG (291)
+
+
+Nonterminals, with rules where they appear
+
+    $accept (48)
+        on left: 0
+    ROOT (49)
+        on left: 1
+        on right: 0
+    program <expr> (50)
+        on left: 2 3
+        on right: 1 3 4
+    contained_program <expr> (51)
+        on left: 4
+        on right: 20
+    expression <expr> (52)
+        on left: 5 6 7 8 9 10
+        on right: 2 3 8 9
+    assignment_expression <expr> (53)
+        on left: 11 12 13
+        on right: 6 8
+    declaration <expr> (54)
+        on left: 14 15
+        on right: 7 9 11 17 20
+    declaration_list <expr> (55)
+        on left: 16 17
+        on right: 14 17
+    declaration_expression <expr> (56)
+        on left: 18 19
+        on right: 15 16 19
+    function_definitions <expr> (57)
+        on left: 20
+        on right: 5
+    primative <expr> (58)
+        on left: 21 22 23
+        on right: 10 11 12 32 33 34 35
+    data_type <expr> (59)
+        on left: 24 25 26 27 28 29 30 31
+        on right: 18
+    multiplication_expression <expr> (60)
+        on left: 32 33 34 35
+        on right: 13 33 34 35
+
+
+State 0
+
+    0 $accept: . ROOT $end
+
+    T_INT     shift, and go to state 1
+    T_CHAR    shift, and go to state 2
+    T_STRING  shift, and go to state 3
+    T_DOUBLE  shift, and go to state 4
+    T_FLOAT   shift, and go to state 5
+    T_BOOL    shift, and go to state 6
+    T_VOID    shift, and go to state 7
+    T_LONG    shift, and go to state 8
+    name      shift, and go to state 9
+    T_RETURN  shift, and go to state 10
+
+    ROOT                    go to state 11
+    program                 go to state 12
+    expression              go to state 13
+    assignment_expression   go to state 14
+    declaration             go to state 15
+    declaration_list        go to state 16
+    declaration_expression  go to state 17
+    data_type               go to state 18
+
+
+State 1
+
+   24 data_type: T_INT .
+
+    $default  reduce using rule 24 (data_type)
+
+
+State 2
+
+   28 data_type: T_CHAR .
+
+    $default  reduce using rule 28 (data_type)
+
+
+State 3
+
+   27 data_type: T_STRING .
+
+    $default  reduce using rule 27 (data_type)
+
+
+State 4
+
+   26 data_type: T_DOUBLE .
+
+    $default  reduce using rule 26 (data_type)
+
+
+State 5
+
+   25 data_type: T_FLOAT .
+
+    $default  reduce using rule 25 (data_type)
+
+
+State 6
+
+   29 data_type: T_BOOL .
+
+    $default  reduce using rule 29 (data_type)
+
+
+State 7
+
+    5 expression: T_VOID . function_definitions
+   31 data_type: T_VOID .
+
+    T_INT     shift, and go to state 1
+    T_CHAR    shift, and go to state 2
+    T_STRING  shift, and go to state 3
+    T_DOUBLE  shift, and go to state 4
+    T_FLOAT   shift, and go to state 5
+    T_BOOL    shift, and go to state 6
+    T_VOID    shift, and go to state 19
+    T_LONG    shift, and go to state 8
+
+    $default  reduce using rule 31 (data_type)
+
+    declaration             go to state 20
+    declaration_list        go to state 16
+    declaration_expression  go to state 17
+    function_definitions    go to state 21
+    data_type               go to state 18
+
+
+State 8
+
+   30 data_type: T_LONG .
+
+    $default  reduce using rule 30 (data_type)
+
+
+State 9
+
+   12 assignment_expression: name . T_EQUALS primative ';'
+   13                      | name . T_EQUALS multiplication_expression ';'
+
+    T_EQUALS  shift, and go to state 22
+
+
+State 10
+
+   10 expression: T_RETURN . primative ';'
+
+    STRING_LITERAL  shift, and go to state 23
+    CONSTANT        shift, and go to state 24
+    NUMBER          shift, and go to state 25
+
+    primative  go to state 26
+
+
+State 11
+
+    0 $accept: ROOT . $end
+
+    $end  shift, and go to state 27
+
+
+State 12
+
+    1 ROOT: program .
+    3 program: program . expression
+
+    T_INT     shift, and go to state 1
+    T_CHAR    shift, and go to state 2
+    T_STRING  shift, and go to state 3
+    T_DOUBLE  shift, and go to state 4
+    T_FLOAT   shift, and go to state 5
+    T_BOOL    shift, and go to state 6
+    T_VOID    shift, and go to state 7
+    T_LONG    shift, and go to state 8
+    name      shift, and go to state 9
+    T_RETURN  shift, and go to state 10
+
+    $default  reduce using rule 1 (ROOT)
+
+    expression              go to state 28
+    assignment_expression   go to state 14
+    declaration             go to state 15
+    declaration_list        go to state 16
+    declaration_expression  go to state 17
+    data_type               go to state 18
+
+
+State 13
+
+    2 program: expression .
+    8 expression: expression . assignment_expression ';'
+    9           | expression . declaration ';'
+
+    T_INT     shift, and go to state 1
+    T_CHAR    shift, and go to state 2
+    T_STRING  shift, and go to state 3
+    T_DOUBLE  shift, and go to state 4
+    T_FLOAT   shift, and go to state 5
+    T_BOOL    shift, and go to state 6
+    T_VOID    shift, and go to state 19
+    T_LONG    shift, and go to state 8
+    name      shift, and go to state 9
+
+    T_INT     [reduce using rule 2 (program)]
+    T_CHAR    [reduce using rule 2 (program)]
+    T_STRING  [reduce using rule 2 (program)]
+    T_DOUBLE  [reduce using rule 2 (program)]
+    T_FLOAT   [reduce using rule 2 (program)]
+    T_BOOL    [reduce using rule 2 (program)]
+    T_VOID    [reduce using rule 2 (program)]
+    T_LONG    [reduce using rule 2 (program)]
+    name      [reduce using rule 2 (program)]
+    $default  reduce using rule 2 (program)
+
+    assignment_expression   go to state 29
+    declaration             go to state 30
+    declaration_list        go to state 16
+    declaration_expression  go to state 17
+    data_type               go to state 18
+
+
+State 14
+
+    6 expression: assignment_expression . ';'
+
+    ';'  shift, and go to state 31
+
+
+State 15
+
+    7 expression: declaration . ';'
+   11 assignment_expression: declaration . T_EQUALS primative ';'
+
+    T_EQUALS  shift, and go to state 32
+    ';'       shift, and go to state 33
+
+
+State 16
+
+   14 declaration: declaration_list . ';'
+   17 declaration_list: declaration_list . ';' declaration
+
+    ';'  shift, and go to state 34
+
+
+State 17
+
+   15 declaration: declaration_expression .
+   16 declaration_list: declaration_expression .
+   19 declaration_expression: declaration_expression . name
+
+    name  shift, and go to state 35
+
+    name      [reduce using rule 15 (declaration)]
+    ';'       reduce using rule 15 (declaration)
+    ';'       [reduce using rule 16 (declaration_list)]
+    $default  reduce using rule 15 (declaration)
+
+
+State 18
+
+   18 declaration_expression: data_type . name
+
+    name  shift, and go to state 36
+
+
+State 19
+
+   31 data_type: T_VOID .
+
+    $default  reduce using rule 31 (data_type)
+
+
+State 20
+
+   20 function_definitions: declaration . name '(' declaration ')' contained_program
+
+    name  shift, and go to state 37
+
+
+State 21
+
+    5 expression: T_VOID function_definitions .
+
+    $default  reduce using rule 5 (expression)
+
+
+State 22
+
+   12 assignment_expression: name T_EQUALS . primative ';'
+   13                      | name T_EQUALS . multiplication_expression ';'
+
+    STRING_LITERAL  shift, and go to state 23
+    CONSTANT        shift, and go to state 24
+    NUMBER          shift, and go to state 25
+
+    primative                  go to state 38
+    multiplication_expression  go to state 39
+
+
+State 23
+
+   21 primative: STRING_LITERAL .
+
+    $default  reduce using rule 21 (primative)
+
+
+State 24
+
+   22 primative: CONSTANT .
+
+    $default  reduce using rule 22 (primative)
+
+
+State 25
+
+   23 primative: NUMBER .
+
+    $default  reduce using rule 23 (primative)
+
+
+State 26
+
+   10 expression: T_RETURN primative . ';'
+
+    ';'  shift, and go to state 40
+
+
+State 27
+
+    0 $accept: ROOT $end .
+
+    $default  accept
+
+
+State 28
+
+    3 program: program expression .
+    8 expression: expression . assignment_expression ';'
+    9           | expression . declaration ';'
+
+    T_INT     shift, and go to state 1
+    T_CHAR    shift, and go to state 2
+    T_STRING  shift, and go to state 3
+    T_DOUBLE  shift, and go to state 4
+    T_FLOAT   shift, and go to state 5
+    T_BOOL    shift, and go to state 6
+    T_VOID    shift, and go to state 19
+    T_LONG    shift, and go to state 8
+    name      shift, and go to state 9
+
+    T_INT     [reduce using rule 3 (program)]
+    T_CHAR    [reduce using rule 3 (program)]
+    T_STRING  [reduce using rule 3 (program)]
+    T_DOUBLE  [reduce using rule 3 (program)]
+    T_FLOAT   [reduce using rule 3 (program)]
+    T_BOOL    [reduce using rule 3 (program)]
+    T_VOID    [reduce using rule 3 (program)]
+    T_LONG    [reduce using rule 3 (program)]
+    name      [reduce using rule 3 (program)]
+    $default  reduce using rule 3 (program)
+
+    assignment_expression   go to state 29
+    declaration             go to state 30
+    declaration_list        go to state 16
+    declaration_expression  go to state 17
+    data_type               go to state 18
+
+
+State 29
+
+    8 expression: expression assignment_expression . ';'
+
+    ';'  shift, and go to state 41
+
+
+State 30
+
+    9 expression: expression declaration . ';'
+   11 assignment_expression: declaration . T_EQUALS primative ';'
+
+    T_EQUALS  shift, and go to state 32
+    ';'       shift, and go to state 42
+
+
+State 31
+
+    6 expression: assignment_expression ';' .
+
+    $default  reduce using rule 6 (expression)
+
+
+State 32
+
+   11 assignment_expression: declaration T_EQUALS . primative ';'
+
+    STRING_LITERAL  shift, and go to state 23
+    CONSTANT        shift, and go to state 24
+    NUMBER          shift, and go to state 25
+
+    primative  go to state 43
+
+
+State 33
+
+    7 expression: declaration ';' .
+
+    $default  reduce using rule 7 (expression)
+
+
+State 34
+
+   14 declaration: declaration_list ';' .
+   17 declaration_list: declaration_list ';' . declaration
+
+    T_INT     shift, and go to state 1
+    T_CHAR    shift, and go to state 2
+    T_STRING  shift, and go to state 3
+    T_DOUBLE  shift, and go to state 4
+    T_FLOAT   shift, and go to state 5
+    T_BOOL    shift, and go to state 6
+    T_VOID    shift, and go to state 19
+    T_LONG    shift, and go to state 8
+
+    $default  reduce using rule 14 (declaration)
+
+    declaration             go to state 44
+    declaration_list        go to state 16
+    declaration_expression  go to state 17
+    data_type               go to state 18
+
+
+State 35
+
+   19 declaration_expression: declaration_expression name .
+
+    $default  reduce using rule 19 (declaration_expression)
+
+
+State 36
+
+   18 declaration_expression: data_type name .
+
+    $default  reduce using rule 18 (declaration_expression)
+
+
+State 37
+
+   20 function_definitions: declaration name . '(' declaration ')' contained_program
+
+    '('  shift, and go to state 45
+
+
+State 38
+
+   12 assignment_expression: name T_EQUALS primative . ';'
+   32 multiplication_expression: primative .
+
+    ';'  shift, and go to state 46
+
+    ';'       [reduce using rule 32 (multiplication_expression)]
+    $default  reduce using rule 32 (multiplication_expression)
+
+
+State 39
+
+   13 assignment_expression: name T_EQUALS multiplication_expression . ';'
+   33 multiplication_expression: multiplication_expression . '*' primative
+   34                          | multiplication_expression . '/' primative
+   35                          | multiplication_expression . '%' primative
+
+    ';'  shift, and go to state 47
+    '*'  shift, and go to state 48
+    '/'  shift, and go to state 49
+    '%'  shift, and go to state 50
+
+
+State 40
+
+   10 expression: T_RETURN primative ';' .
+
+    $default  reduce using rule 10 (expression)
+
+
+State 41
+
+    8 expression: expression assignment_expression ';' .
+
+    $default  reduce using rule 8 (expression)
+
+
+State 42
+
+    9 expression: expression declaration ';' .
+
+    $default  reduce using rule 9 (expression)
+
+
+State 43
+
+   11 assignment_expression: declaration T_EQUALS primative . ';'
+
+    ';'  shift, and go to state 51
+
+
+State 44
+
+   17 declaration_list: declaration_list ';' declaration .
+
+    $default  reduce using rule 17 (declaration_list)
+
+
+State 45
+
+   20 function_definitions: declaration name '(' . declaration ')' contained_program
+
+    T_INT     shift, and go to state 1
+    T_CHAR    shift, and go to state 2
+    T_STRING  shift, and go to state 3
+    T_DOUBLE  shift, and go to state 4
+    T_FLOAT   shift, and go to state 5
+    T_BOOL    shift, and go to state 6
+    T_VOID    shift, and go to state 19
+    T_LONG    shift, and go to state 8
+
+    declaration             go to state 52
+    declaration_list        go to state 16
+    declaration_expression  go to state 17
+    data_type               go to state 18
+
+
+State 46
+
+   12 assignment_expression: name T_EQUALS primative ';' .
+
+    $default  reduce using rule 12 (assignment_expression)
+
+
+State 47
+
+   13 assignment_expression: name T_EQUALS multiplication_expression ';' .
+
+    $default  reduce using rule 13 (assignment_expression)
+
+
+State 48
+
+   33 multiplication_expression: multiplication_expression '*' . primative
+
+    STRING_LITERAL  shift, and go to state 23
+    CONSTANT        shift, and go to state 24
+    NUMBER          shift, and go to state 25
+
+    primative  go to state 53
+
+
+State 49
+
+   34 multiplication_expression: multiplication_expression '/' . primative
+
+    STRING_LITERAL  shift, and go to state 23
+    CONSTANT        shift, and go to state 24
+    NUMBER          shift, and go to state 25
+
+    primative  go to state 54
+
+
+State 50
+
+   35 multiplication_expression: multiplication_expression '%' . primative
+
+    STRING_LITERAL  shift, and go to state 23
+    CONSTANT        shift, and go to state 24
+    NUMBER          shift, and go to state 25
+
+    primative  go to state 55
+
+
+State 51
+
+   11 assignment_expression: declaration T_EQUALS primative ';' .
+
+    $default  reduce using rule 11 (assignment_expression)
+
+
+State 52
+
+   20 function_definitions: declaration name '(' declaration . ')' contained_program
+
+    ')'  shift, and go to state 56
+
+
+State 53
+
+   33 multiplication_expression: multiplication_expression '*' primative .
+
+    $default  reduce using rule 33 (multiplication_expression)
+
+
+State 54
+
+   34 multiplication_expression: multiplication_expression '/' primative .
+
+    $default  reduce using rule 34 (multiplication_expression)
+
+
+State 55
+
+   35 multiplication_expression: multiplication_expression '%' primative .
+
+    $default  reduce using rule 35 (multiplication_expression)
+
+
+State 56
+
+   20 function_definitions: declaration name '(' declaration ')' . contained_program
+
+    '{'  shift, and go to state 57
+
+    contained_program  go to state 58
+
+
+State 57
+
+    4 contained_program: '{' . program '}'
+
+    T_INT     shift, and go to state 1
+    T_CHAR    shift, and go to state 2
+    T_STRING  shift, and go to state 3
+    T_DOUBLE  shift, and go to state 4
+    T_FLOAT   shift, and go to state 5
+    T_BOOL    shift, and go to state 6
+    T_VOID    shift, and go to state 7
+    T_LONG    shift, and go to state 8
+    name      shift, and go to state 9
+    T_RETURN  shift, and go to state 10
+
+    program                 go to state 59
+    expression              go to state 13
+    assignment_expression   go to state 14
+    declaration             go to state 15
+    declaration_list        go to state 16
+    declaration_expression  go to state 17
+    data_type               go to state 18
+
+
+State 58
+
+   20 function_definitions: declaration name '(' declaration ')' contained_program .
+
+    $default  reduce using rule 20 (function_definitions)
+
+
+State 59
+
+    3 program: program . expression
+    4 contained_program: '{' program . '}'
+
+    T_INT     shift, and go to state 1
+    T_CHAR    shift, and go to state 2
+    T_STRING  shift, and go to state 3
+    T_DOUBLE  shift, and go to state 4
+    T_FLOAT   shift, and go to state 5
+    T_BOOL    shift, and go to state 6
+    T_VOID    shift, and go to state 7
+    T_LONG    shift, and go to state 8
+    name      shift, and go to state 9
+    T_RETURN  shift, and go to state 10
+    '}'       shift, and go to state 60
+
+    expression              go to state 28
+    assignment_expression   go to state 14
+    declaration             go to state 15
+    declaration_list        go to state 16
+    declaration_expression  go to state 17
+    data_type               go to state 18
+
+
+State 60
+
+    4 contained_program: '{' program '}' .
+
+    $default  reduce using rule 4 (contained_program)
